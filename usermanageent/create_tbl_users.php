@@ -2,49 +2,48 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "db_webpro5d";
+$dbname = "webprodb5d";
 
 // Create connection
-$conn = new mysqli($servername,$username,$password,$dbname);
+$conn = new mysqli($servername, $username, $password, $dbname);
 
 // Check connection
-if($conn->connect_error){
-    die("Connection failed:".$conn->connect_error);
+if ($conn->connect_error) {
+    die("Connection failed:" . $conn->connect_error);
 }
 
-// // sql to create table
-// $sql2 = "CREATE TABLE users(
-//     id INT(11) NOT NULL AUTO_INCREMENT,
-//     username VARCHAR(50) NOT NULL UNIQUE,
-//     password VARCHAR(100) NOT NULL,
-//     fullname VARCHAR(50) NOT NULL,
-//     role VARCHAR(50) NOT NULL,
-//     status ENUM('active','inactive') DEFAULT CURRENT_TIMESTAMP,
-//     updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//     primary key (id)
-//     )";
+// SQL untuk buat tabel users
+$sql = "CREATE TABLE IF NOT EXISTS users (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    username VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    fullname VARCHAR(100) NOT NULL,
+    role ENUM('visitor','operator','admin') NOT NULL DEFAULT 'visitor',
+    status ENUM('active','inactive') NOT NULL DEFAULT 'active',
+    updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (id)
+)";
 
-// if ($conn->query($sql) === TRUE){
-//     echo "Table products created successfully";
-// }else{
-//     echo "Error creating table products:".$conn->error;
-// }
+if ($conn->query($sql) === TRUE) {
+    echo "Table users created successfully<br>";
+} else {
+    echo "Error creating table users: " . $conn->error . "<br>";
+}
 
-// // // sql to create table baru
-// $sql2 = "CREATE TABLE new_products(
-//     id INT(11) NOT NULL AUTO_INCREMENT,
-//     name VARCHAR(100) NOT NULL,
-// //     alamat TEXT NOT NULL,
-//     nik CHAR(16) NOT NULL,
-//     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-//     PRIMARY KEY(id)
-// // )";
+// contoh tambahan table new_products (opsional)
+$sql2 = "CREATE TABLE IF NOT EXISTS new_products (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    name VARCHAR(100) NOT NULL,
+    nik CHAR(16) NOT NULL,
+    created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY(id)
+)";
 
+if ($conn->query($sql2) === TRUE) {
+    echo "Table new_products created successfully<br>";
+} else {
+    echo "Error creating table new_products: " . $conn->error . "<br>";
+}
 
-// if ($conn->query($sql2) === TRUE){
-//     echo "Table products created successfully";
-// }else{
-//     echo "Error creating table products:".$conn->error;
-// }
 $conn->close();
 ?>

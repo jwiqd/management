@@ -5,14 +5,17 @@ ini_set('display_startup_errors', 1);
 error_reporting(E_ALL);
 
 // ======= konfigurasi DB: sesuaikan jika perlu =======
-$DB_HOST = '127.0.0.1';
-$DB_USER = 'root';
-$DB_PASS = '';
-$DB_NAME = 'db_webpro5d';
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "webprodb5d";
 
-$conn = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME);
-if ($conn->connect_error) {
-    die('DB connection failed: ' . $conn->connect_error);
+// Create connection
+$conn = new mysqli($servername,$username,$password,$dbname);
+
+// Check connection
+if($conn->connect_error){
+    die("Connection failed:".$conn->connect_error);
 }
 
 // ======= proses form =======
@@ -45,7 +48,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $conn->prepare($sql);
             $stmt->bind_param("ssss", $username, $hashed, $fullname, $role);
             if ($stmt->execute()) {
-                $message = 'Registrasi berhasil. <a href="read_table_view.php">Login</a>';
+                header('Location: create_account.php');
+                exit;
             } else {
                 $message = 'Error saat menyimpan: ' . $stmt->error;
             }
@@ -111,7 +115,7 @@ function validateForm(){
       <label><input type="radio" name="role" value="admin"> Admin</label>
     </div>
 
-    <button type="submit">Register</button>
+    <button type="submit" href="create_account.php">Register</button>
   </form>
 </div>
 </body>
